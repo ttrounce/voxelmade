@@ -6,6 +6,8 @@ cmake/
 *.so
 *.a
 
+!dependencies/glad/*
+
 # Batch Files
 test
 
