@@ -1,0 +1,5 @@
+language: c
+compiler: gcc
+
+install: cmake -G "MinGW Makefiles" -B cmake
+script: cmake --build cmake
