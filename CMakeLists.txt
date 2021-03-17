@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.17)
 # GLFW Dependency
 add_subdirectory(dependencies/glfw)
 
-add_subdirectory(dependencies/glad_)
+# GLAD Dependency
+add_subdirectory(dependencies/glad)
 
 project(VoxelMade)
 
