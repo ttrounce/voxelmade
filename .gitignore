@@ -5,3 +5,9 @@ cmake/
 *.dll
 *.so
 *.a
+
+# Batch Files
+test
+
+# VSCode
+.vscode/
