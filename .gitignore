@@ -5,3 +5,11 @@ cmake/
 *.dll
 *.so
 *.a
+
+!dependencies/glad/*
+
+# Batch Files
+test
+
+# VSCode
+.vscode/
