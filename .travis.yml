@@ -1,5 +1,5 @@
 language: c
 compiler: gcc
-
+os: windows
 install: cmake -G "MinGW Makefiles" -B cmake
 script: cmake --build cmake
