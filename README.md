@@ -11,6 +11,7 @@ Code style is essentially C using C++ operator overloading, please don't hate me
 
 - [Dav1dde/glad](https://github.com/Dav1dde/glad) ([License](https://github.com/Dav1dde/glad/blob/master/LICENSE))
 - [glfw/glfw](https://github.com/glfw/glfw) ([License](https://github.com/glfw/glfw/blob/master/LICENSE.md))
+- [google/googletest](https://github.com/google/googletest) ([License](https://github.com/google/googletest/blob/master/LICENSE))
 
 ## Licence
 
