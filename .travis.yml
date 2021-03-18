@@ -4,5 +4,6 @@ os: windows
 branch:
   only:
   - main
+  - dev
 install: cmake -G "MinGW Makefiles" -B cmake -DCMAKE_CXX_FLAGS="-O3"
 script: cmake --build cmake
