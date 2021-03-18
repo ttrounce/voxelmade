@@ -28,7 +28,7 @@ target_link_libraries(${PROJECT_NAME} ${PROJECT_LIB})
 
 # Tests
 
-option(BUILD_TESTS "Build all tests." OFF)
+option(BUILD_TESTS "Build tests" OFF)
 
 if(BUILD_TESTS)
     # Google Test Dependency
