@@ -26,13 +26,13 @@ int vhm_InitEngine()
                 {   
                     return VHM_SUCCESS;
                 }
-                else printf("%s Could not load GL\n", VHM_GLAD_LOG);
+                else printf("%s Could not load GL\n", VHM_GLAD_ERR);
             }
-            else printf("%s Could not create GLFW window\n", VHM_GLFW_LOG);
+            else printf("%s Could not create GLFW window\n", VHM_GLFW_ERR);
         }
-        else printf("%s Could not allocate window\n", VHM_ENGINE_LOG);
+        else printf("%s Could not allocate window\n", VHM_ENGINE_ERR);
     }
-    else printf("%s Could not initialise GLFW\n", VHM_GLFW_LOG);
+    else printf("%s Could not initialise GLFW\n", VHM_GLFW_ERR);
     return VHM_GENERAL_ERROR;
 }
 

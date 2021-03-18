@@ -9,7 +9,7 @@ cmake/
 !dependencies/glad/*
 
 # Batch Files
-test
+scripts/
 
 # VSCode
 .vscode/
