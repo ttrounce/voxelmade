@@ -2,5 +2,5 @@
 
 TEST(tests, ExampleTest) {
     EXPECT_TRUE(true);
-    EXPECT_FALSE(true);
+    EXPECT_FALSE(false);
 }
