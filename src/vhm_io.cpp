@@ -26,3 +26,14 @@ char* vhm_ReadString(const char* path)
     else printf("%s File not found %s\n", VHM_ENGINE_ERR, path);
     return NULL;
 }
+
+void vhm_WriteString(const char* path, const char* value, int length)
+{
+    FILE* file = fopen(path, "wb");
+    if(file)
+    {
+        fwrite(value, sizeof(char), length, file);
+        fclose(file);
+    }
+    else printf("%s File not found %s\n", VHM_ENGINE_ERR, path);
+}

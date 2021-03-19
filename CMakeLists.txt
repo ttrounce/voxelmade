@@ -33,13 +33,14 @@ option(BUILD_TESTS "Build tests" OFF)
 if(BUILD_TESTS)
     # Google Test Dependency
     add_subdirectory(dependencies/googletest)
-
+    
     enable_testing()
     include(CTest)
-
+    
     add_executable(runUnitTests ${TEST_SOURCES})
     target_link_libraries(runUnitTests gtest gtest_main)
     target_link_libraries(runUnitTests ${PROJECT_LIB})
+    include_directories(src)
 
     add_test(UnitTests runUnitTests)
 endif()
