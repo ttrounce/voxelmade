@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: cmake -G "MinGW Makefiles" -B cmake -DCMAKE_CXX_FLAGS="-O3" -DBUILD_TESTS=ON
+    - name: make
+      run: cmake --build cmake
+    - name: tests
+      run: ./cmake/runUnitTests
