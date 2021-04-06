@@ -1,11 +1,12 @@
-#include <stdlib.h>
+#include "engine_io.h"
+
+#include "logging.h"
+#include "types.h"
+
 #include <stdio.h>
+#include <stdlib.h>
 
-#include "vhm_log.h"
-#include "vhm_types.h"
-#include "vhm_io.h"
-
-char* vhm_ReadString(const char* path)
+char* vhm::ReadString(const char* path)
 {
     FILE* file = fopen(path, "rb");
     if(file)
@@ -27,7 +28,7 @@ char* vhm_ReadString(const char* path)
     return NULL;
 }
 
-void vhm_WriteString(const char* path, const char* value, int length)
+void vhm::WriteString(const char* path, const char* value, int length)
 {
     FILE* file = fopen(path, "wb");
     if(file)

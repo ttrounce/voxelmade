@@ -1,5 +1,5 @@
-language: c
-compiler: gcc
+language: c++
+compiler: g++
 os: windows
 branch:
   only:

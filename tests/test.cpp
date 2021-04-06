@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "vhm_io.h"
+#include "engine_io.h"
 
 #include <stdio.h>
 
@@ -27,14 +27,45 @@ const char* file_filled_path = "filled_file_test.txt";
 
 TEST(VHM_IO_TEST, READ_EMPTY_FILE) {
     build_empty_file(file_empty_path);
-    ASSERT_STREQ(vhm_ReadString(file_empty_path), "");
+    ASSERT_STREQ(vhm::ReadString(file_empty_path), "");
     remove(file_empty_path);
 }
 
 TEST(VHM_IO_TEST, WRITE_AND_READ_FILLED_FILE) {
     const char* text = "this is test text";
     int length = strlen(text);
-    vhm_WriteString(file_filled_path, text, length);
-    ASSERT_STREQ(vhm_ReadString(file_filled_path), text);
+    vhm::WriteString(file_filled_path, text, length);
+    ASSERT_STREQ(vhm::ReadString(file_filled_path), text);
     remove(file_filled_path);
+}
+
+/* ------------- VHM_GLM ------------- */
+
+#include "glm.h"
+
+TEST(VHM_GLM_TEST, VEC2_SET) {
+    vec2 result;
+    vhm::glm_Vec2Set(5.23, -323.4, result);
+
+    ASSERT_FLOAT_EQ(result[0], 5.23);
+    ASSERT_FLOAT_EQ(result[1], -323.4);
+}
+
+TEST(VHM_GLM_TEST, VEC3_SET) {
+    vec3 result;
+    vhm::glm_Vec3Set(5.23, -323.4, 0.00034, result);
+
+    ASSERT_FLOAT_EQ(result[0], 5.23);
+    ASSERT_FLOAT_EQ(result[1], -323.4);
+    ASSERT_FLOAT_EQ(result[2], 0.00034);
+}
+
+TEST(VHM_GLM_TEST, VEC4_SET) {
+    vec4 result;
+    vhm::glm_Vec4Set(5.23, -323.4, 0.00034, -393550.05, result);
+
+    ASSERT_FLOAT_EQ(result[0], 5.23);
+    ASSERT_FLOAT_EQ(result[1], -323.4);
+    ASSERT_FLOAT_EQ(result[2], 0.00034);
+    ASSERT_FLOAT_EQ(result[3], -393550.05);
 }
