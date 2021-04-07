@@ -1,25 +1,24 @@
-#include "engine.h"
-#include "font.h"
-#include "camera.h"
-#include "engine_io.h"
-#include "gfx.h"
+#include "engine/engine.h"
+#include "engine/font.h"
+#include "engine/camera.h"
+#include "engine/gfx.h"
+#include "engine/gui/guirenderer.h"
+
+#include "utility/color.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <stdio.h>
 #include <string.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 
 using namespace vhm;
 
-vec3 COL_BLACK = {0.0, 0.0, 0.0};
-
-u32 terrainProgram;
+constexpr char* FONT_HACK = (char*) "hack";
 
 PERSPECTIVE_CAMERA* camera;
-
-#include <chrono>
 
 void Init()
 {
@@ -31,19 +30,11 @@ void Init()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     
-    char* vert = ReadString("terrain.vert");
-    char* frag = ReadString("terrain.frag");
-    terrainProgram = glCreateProgram();
-    CreateVertexShader(terrainProgram, vert, strlen(vert));
-    CreateFragmentShader(terrainProgram, frag, strlen(frag));
-    LinkProgram(terrainProgram);
-    free(vert);
-    free(frag);
-
     camera = new PERSPECTIVE_CAMERA(GetAspectRatio(), 70.0, 0.01, 1000.0);
 
-    FONT_RENDERER::GetInstance()->DeriveFace(24);
+    FONT_RENDERER::GetInstance()->LoadNewFace(FONT_HACK, "fonts/hack.ttf", 24);
 }
+
 
 void Clean()
 {
@@ -59,7 +50,7 @@ void Update(f64 time, f64 dt)
 void Draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(col(110.0), col(207.0), col(225.0), 1.0);
+    glClearColor(110.0/255.0, 207.0/255.0, 225.0/255.0, 1.0);
 
     // glUseProgram(terrainProgram);
 
@@ -70,11 +61,11 @@ void Draw()
 
     char* text = (char*) malloc(snprintf(NULL, 0, "%d", window->fps) + 1);
     sprintf(text, "%d", window->fps);
-    free(text);
 
     FONT_RENDERER* fonter = FONT_RENDERER::GetInstance();
-
-    fonter->RenderText(text, GetWindowWidth() - fonter->TextLength(text) - 5, 5, COL_BLACK);
+    fonter->RenderText(FONT_HACK, text, 5, 5, COLOR(0x000000));
+    fonter->RenderText(FONT_HACK, "VOXELMADE", (GetWindowWidth() - fonter->TextWidth(FONT_HACK, "VOXELMADE")) / 2.0, 5, COLOR(0x000000));
+    free(text);
 }
 
 int main()

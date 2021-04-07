@@ -1,10 +1,14 @@
+#include "../utility/logging.h"
+#include "../utility/types.h"
 #include "gfx.h"
-#include "logging.h"
 
+#include <stb_image.h>
 #include <stdio.h>
 #include <glad/glad.h>
 
 #define MAX_VBOS 16
+
+using namespace vhm;
 
 void vhm::SetBufferVAO(vhm::VAO& vao, u32 index, u32 size, void* data, u32 type, u32 length)
 {
@@ -26,7 +30,7 @@ void vhm::SetBufferVAO(vhm::VAO& vao, u32 index, u32 size, void* data, u32 type,
         glEnableVertexAttribArray(index);
         vao.vbos.push_back(vbo);
     }
-    else printf("%s Only VBO indices between 0 and %d can be used\n", index, MAX_VBOS);
+    else printf("%s Only VBO indices between 0 and %d can be used\n", VHM_ENGINE_ERR, MAX_VBOS);
 }
 
 // Shader Program
@@ -164,4 +168,40 @@ void vhm::SetTextureArrayStorage(u32 handle, u32 internalFormat, u32 width, u32 
 void vhm::LoadTextureArrayLayer(u32 handle, u8* data, u32 x, u32 y, u32 width, u32 height, u32 layer, u32 format)
 {
     glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, x, y, layer, width, height, 1, format, GL_UNSIGNED_BYTE, data);
+}
+
+u32 vhm::CreateQuickTexture(u32 target, u32* textureHandle, const char* path, u32 min, u32 mag)
+{
+    i32 w, h, c;
+    u8* data = stbi_load(path, &w, &h, &c, STBI_rgb_alpha);
+
+    if(!data)
+    {
+        printf("%s Unable to load texture due to an unknown error\n", VHM_ENGINE_ERR);
+        return VHM_ERROR;
+    }
+
+    u32 format;
+
+    switch(c)
+    {
+        case STBI_rgb:
+            format = GL_RGB;
+            break;
+        case STBI_rgb_alpha:
+            format = GL_RGBA;
+            break;
+        default:
+            printf("%s Unable to load texture due to an unexpected pixel format\n", VHM_ENGINE_ERR);
+            stbi_image_free(data);
+            return VHM_ERROR;
+    }
+
+    glGenTextures(1, textureHandle);
+    glBindTexture(target, *textureHandle);
+    SetMinMag(target, min, mag);
+    LoadTexture(*textureHandle, data, w, h, format, format);
+    glBindTexture(target, 0);
+    stbi_image_free(data);
+    return VHM_SUCCESS;
 }

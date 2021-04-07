@@ -6,6 +6,8 @@ cmake/
 *.so
 *.a
 
+# Output
+build/
 !dependencies/glad/*
 
 # Batch Files

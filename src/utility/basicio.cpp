@@ -1,4 +1,4 @@
-#include "engine_io.h"
+#include "basicio.h"
 
 #include "logging.h"
 #include "types.h"
@@ -18,7 +18,7 @@ char* vhm::ReadString(const char* path)
         char* source = (char*) malloc(size + 1);
         if(source)
         {
-            int readSize = fread(source, 1, size, file);
+            fread(source, 1, size, file);
             source[size] = '\0';
         }
         fclose(file);

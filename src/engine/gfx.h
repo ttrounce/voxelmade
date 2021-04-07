@@ -1,11 +1,14 @@
 #ifndef VHM_GFX_H
 #define VHM_GFX_H
 
-#include "types.h"
+#include "../utility/types.h"
 #include <vector>
 
 namespace vhm
 {
+
+constexpr const f32 GFX_LAYER_TEXT = -0.0;
+constexpr const f32 GFX_LAYER_GUI = -1.0;
 
 // VAO/VBO
 
@@ -38,6 +41,7 @@ void LoadTexture(u32 handle, u8* data, u32 width, u32 height, u32 internalFormat
 void LoadTextureArray(u32 handle, u8* data, u32 width, u32 height, u32 depth, u32 internalFormat, u32 format);
 void SetTextureArrayStorage(u32 handle, u32 internalFormat, u32 width, u32 height, u32 depth);
 void LoadTextureArrayLayer(u32 handle, u8* data, u32 x, u32 y, u32 width, u32 height, u32 layer, u32 format);
+u32 CreateQuickTexture(u32 target, u32* textureHandle, const char* path, u32 min, u32 mag);
 
 }
 

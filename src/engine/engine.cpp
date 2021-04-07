@@ -1,5 +1,5 @@
 #include "engine.h"
-#include "types.h"
+#include "../utility/types.h"
 
 #include <cglm/cglm.h>
 #include <stdlib.h>

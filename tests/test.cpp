@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "engine_io.h"
+#include "utility/basicio.h"
 
 #include <stdio.h>
 
@@ -41,7 +41,7 @@ TEST(VHM_IO_TEST, WRITE_AND_READ_FILLED_FILE) {
 
 /* ------------- VHM_GLM ------------- */
 
-#include "glm.h"
+#include "utility/glm.h"
 
 TEST(VHM_GLM_TEST, VEC2_SET) {
     vec2 result;

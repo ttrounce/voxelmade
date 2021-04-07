@@ -1,7 +1,7 @@
 #ifndef VHM_TRANSFORM_H
 #define VHM_TRANSFORM_H
 
-#include "glm.h"
+#include "../utility/glm.h"
 
 namespace vhm
 {
