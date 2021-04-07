@@ -113,8 +113,8 @@ void vhm::StartEngine(void (*update)(double, double), void (*draw)())
     
     clock_t startTime = clock();
 
-    double frameTime;
-    int frameCount;        
+    double frameTime = 0.0;
+    int frameCount = 0;        
     while(!glfwWindowShouldClose(window->handle))
     {
         clock_t endTime = clock();
