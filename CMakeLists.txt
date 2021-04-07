@@ -62,8 +62,6 @@ add_custom_command(
 
 # Tests
 
-option(BUILD_TESTS "Build tests" OFF)
-
 if(BUILD_TESTS)
     # Google Test Dependency
     add_subdirectory(dependencies/googletest)

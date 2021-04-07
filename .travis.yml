@@ -8,4 +8,4 @@ branch:
 install: cmake -G "MinGW Makefiles" -DBUILD_TYPE=1 -B cmake
 script:
   - cmake --build cmake
-  - ./build/voxelmade_tests.exe
+  - ./build/voxelmade_tests
