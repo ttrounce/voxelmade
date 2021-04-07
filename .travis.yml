@@ -5,7 +5,7 @@ branch:
   only:
   - main
   - dev
-install: cmake -G "MinGW Makefiles" -B cmake -DCMAKE_CXX_FLAGS="-O3" -DCMAKE_BUILD_TYPE=Release -std=gnu++14 -DBUILD_TESTS=ON 
+install: cmake -G "MinGW Makefiles" -std=gnu++14 -DCMAKE_CXX_FLAGS="-O3" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -B cmake
 script:
   - cmake --build cmake
   - ./build/voxelmade_tests.exe
