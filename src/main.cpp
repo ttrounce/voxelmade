@@ -1,62 +1,81 @@
-#include "vhm_engine.h"
-#include "vhm_gl.h"
-#include "vhm_io.h"
+#include "engine/engine.h"
+#include "engine/font.h"
+#include "engine/camera.h"
+#include "engine/gfx.h"
+#include "engine/gui/guirenderer.h"
 
-#include <glad/glad.h>
+#include "utility/color.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include <stdio.h>
 #include <string.h>
+#include <glad/glad.h>
+#include <glfw/glfw3.h>
 
-u32 vao;
-u32 vbo;
+using namespace vhm;
 
-u32 program;
+constexpr char* FONT_HACK = (char*) "hack";
 
-void vhm_Init()
+PERSPECTIVE_CAMERA* camera;
+
+void Init()
 {
-    char* frag = vhm_ReadString("frag.glsl");
+    InitFreeType();
 
-    glCreateVertexArrays(1, &vao);
-    glCreateBuffers(1, &vbo);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    
+    camera = new PERSPECTIVE_CAMERA(GetAspectRatio(), 70.0, 0.01, 1000.0);
 
-    f32 data[] = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5 }; 
-
-    glBindVertexArray(vbo);
-    vhm_SetBufferVAO(vao, vbo, 0, 2, data, GL_FLOAT, sizeof(data)/sizeof(f32));
-
-    program = glCreateProgram();
-    vhm_CreateFragmentShader(program, frag, strlen(frag));
-    vhm_LinkProgram(program, 0, 0);
+    FONT_RENDERER::GetInstance()->LoadNewFace(FONT_HACK, "fonts/hack.ttf", 24);
 }
 
-void vhm_Clean()
+
+void Clean()
 {
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &vbo);
-    glDeleteProgram(program);
+    free((void*) camera);
+    FreeFreeType();
 }
 
-void vhm_Update(f64 time, f64 dt)
+void Update(f64 time, f64 dt)
 {
-
+    PollCameraInputs(*camera);
 }
 
-void vhm_Draw()
+void Draw()
 {
-    glUseProgram(program);
-    glBindVertexArray(vbo);
-    glDrawArrays(GL_TRIANGLES, 0, 12);
-    glBindVertexArray(0);
-    glUseProgram(0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(110.0/255.0, 207.0/255.0, 225.0/255.0, 1.0);
+
+    // glUseProgram(terrainProgram);
+
+    // UpdatePerspectiveCamera(*camera);
+    // UniformPerspectiveCamera(terrainProgram, "view", "projection", *camera);
+
+    // glUseProgram(0);
+
+    char* text = (char*) malloc(snprintf(NULL, 0, "%d", window->fps) + 1);
+    sprintf(text, "%d", window->fps);
+
+    FONT_RENDERER* fonter = FONT_RENDERER::GetInstance();
+    fonter->RenderText(FONT_HACK, text, 5, 5, COLOR(0x000000));
+    fonter->RenderText(FONT_HACK, "VOXELMADE", (GetWindowWidth() - fonter->TextWidth(FONT_HACK, "VOXELMADE")) / 2.0, 5, COLOR(0x000000));
+    free(text);
 }
 
 int main()
 {
-    if(vhm_InitEngine() == VHM_SUCCESS)
+    if(InitEngine() == VHM_SUCCESS)
     {
-        vhm_Init();
-        vhm_StartEngine(vhm_Update, vhm_Draw);
-        vhm_CleanEngine();
-        vhm_Clean();
+        Init();
+        StartEngine(Update, Draw);
+        CleanEngine();
+        Clean();
         return 0;
     }
     return 1;
