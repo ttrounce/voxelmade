@@ -8,17 +8,19 @@ if(BUILD_TYPE EQUAL 0)
     # Debug
     message("[BUILD TYPE] Debug")
     set(CMAKE_BUILD_TYPE "Debug")
-    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -g -DBUILD_TESTS=ON")
+    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -g")
+    set(BUILD_TESTS "ON")
 elseif(BUILD_TYPE EQUAL 1)
     # Release
     message("[BUILD TYPE] Release (With Tests)")
     set(CMAKE_BUILD_TYPE "Release")
-    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -O3 -DBUILD_TESTS=ON")
+    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -O3")
+    set(BUILD_TESTS "ON")
 elseif(BUILD_TYPE EQUAL 2)
     # Release (No Tests)
     message("[BUILD TYPE] Release (No Tests)")
     set(CMAKE_BUILD_TYPE "Release")
-    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -O3 -DBUILD_TESTS=OFF")
+    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -O3")
 endif()
 
 # Sources and Includes
@@ -61,6 +63,8 @@ add_custom_command(
 )
 
 # Tests
+
+option(BUILD_TESTS "Build tests" OFF)
 
 if(BUILD_TESTS)
     # Google Test Dependency
