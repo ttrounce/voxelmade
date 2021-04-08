@@ -34,7 +34,7 @@ list(REMOVE_ITEM SOURCES src/main.cpp)
 
 # External Dependencies
 
-add_subdirectory(dependencies/asio)
+add_subdirectory(dependencies/vhm_asio)
 add_subdirectory(dependencies/stb)
 add_subdirectory(dependencies/freetype)
 add_subdirectory(dependencies/glfw)

@@ -10,6 +10,6 @@
 [submodule "dependencies/freetype"]
 	path = dependencies/freetype
 	url = https://github.com/freetype/freetype
-[submodule "dependencies/asio"]
-	path = dependencies/asio
+[submodule "dependencies/vhm_asio/asio"]
+	path = dependencies/vhm_asio/asio
 	url = https://github.com/chriskohlhoff/asio
