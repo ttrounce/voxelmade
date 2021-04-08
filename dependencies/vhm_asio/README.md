@@ -1,1 +1,0 @@
-A folder wrapper around [chriskohlhoff/asio](https://github.com/chriskohlhoff/asio) so that CMake can interface with it.

@@ -7,7 +7,6 @@ Code style is essentially light C-style C++. Please don't hate me!
 
 ## Dependencies
 
-- [chriskohlhoff/asio](https://github.com/chriskohlhoff/asio) ([License](https://github.com/chriskohlhoff/asio/blob/master/asio/LICENSE_1_0.txt))
 - [recp/cglm](https://github.com/recp/cglm) ([License](https://github.com/recp/cglm/blob/master/LICENSE))
 - [nothing/stb](https://github.com/nothings/stb) ([MIT License](https://github.com/nothings/stb/blob/master/LICENSE))
 - [freetype/freetype](https://github.com/freetype/freetype) ([FTL License](https://github.com/freetype/freetype/blob/master/docs/FTL.TXT))

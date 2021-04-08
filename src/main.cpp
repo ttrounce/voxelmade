@@ -6,9 +6,6 @@
 
 #include "engine/utility/color.h"
 
-#define ASIO_STANDALONE
-#include <asio.hpp>
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -40,10 +37,9 @@ void Init()
     FONT_RENDERER::GetInstance()->LoadNewFace(FONT_HACK, "fonts/hack.ttf", 24);
 }
 
-
 void Clean()
 {
-    free((void*) camera);
+    delete camera;
     FreeFreeType();
 }
 

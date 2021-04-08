@@ -34,7 +34,6 @@ list(REMOVE_ITEM SOURCES src/main.cpp)
 
 # External Dependencies
 
-add_subdirectory(dependencies/vhm_asio)
 add_subdirectory(dependencies/stb)
 add_subdirectory(dependencies/freetype)
 add_subdirectory(dependencies/glfw)
@@ -45,16 +44,11 @@ add_subdirectory(dependencies/cglm)
 
 add_library(${PROJECT_LIB} ${SOURCES})
 target_link_libraries(${PROJECT_LIB} stb)
-target_link_libraries(${PROJECT_LIB} asio)
 target_link_libraries(${PROJECT_LIB} freetype)
 target_link_libraries(${PROJECT_LIB} glfw)
 target_link_libraries(${PROJECT_LIB} glad)
 target_link_libraries(${PROJECT_LIB} cglm)
 target_include_directories(${PROJECT_LIB} PUBLIC src)
-
-if(MINGW)
-    target_link_libraries(${PROJECT_LIB} ws2_32)
-endif()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIB})
