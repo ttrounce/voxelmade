@@ -1,9 +1,9 @@
 #include "../utility/logging.h"
 #include "../utility/basicio.h"
 #include "../utility/color.h"
+#include "../engine.h"
 #include "font.h"
 #include "gfx.h"
-#include "engine.h"
 
 #include <map>
 #include <cglm/cglm.h>

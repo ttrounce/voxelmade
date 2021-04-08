@@ -1,6 +1,7 @@
-#include <gtest/gtest.h>
-#include "utility/basicio.h"
+#include "engine/utility/basicio.h"
+#include "engine/utility/glm.h"
 
+#include <gtest/gtest.h>
 #include <stdio.h>
 
 void build_empty_file(const char* path)
@@ -38,10 +39,8 @@ TEST(VHM_IO_TEST, WRITE_AND_READ_FILLED_FILE) {
     ASSERT_STREQ(vhm::ReadString(file_filled_path), text);
     remove(file_filled_path);
 }
-
 /* ------------- VHM_GLM ------------- */
 
-#include "utility/glm.h"
 
 TEST(VHM_GLM_TEST, VEC2_SET) {
     vec2 result;

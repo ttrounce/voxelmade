@@ -1,5 +1,5 @@
 #include "camera.h"
-#include "gfx.h"
+#include "gfx/gfx.h"
 #include "engine.h"
 
 #include <glfw/glfw3.h>

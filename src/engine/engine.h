@@ -1,8 +1,8 @@
 #ifndef VHM_WINDOW_H
 #define VHM_WINDOW_H
 
-#include "../utility/types.h"
-#include "../utility/logging.h"
+#include "utility/types.h"
+#include "utility/logging.h"
 
 #define VHM_SUCCESS 0
 #define VHM_GENERAL_ERROR 1

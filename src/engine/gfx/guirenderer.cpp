@@ -1,6 +1,6 @@
-#include "../../utility/basicio.h"
-#include "../../utility/glm.h"
-#include "../../utility/color.h"
+#include "../utility/basicio.h"
+#include "../utility/glm.h"
+#include "../utility/color.h"
 #include "../engine.h"
 #include "guirenderer.h"
 

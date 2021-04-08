@@ -1,8 +1,8 @@
 #ifndef VHM_GUI_H
 #define VHM_GUI_H
 
-#include "../gfx.h"
-#include "../../utility/types.h"
+#include "gfx.h"
+#include "../utility/types.h"
 
 namespace vhm
 {

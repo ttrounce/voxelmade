@@ -1,10 +1,10 @@
 #include "engine/engine.h"
-#include "engine/font.h"
 #include "engine/camera.h"
-#include "engine/gfx.h"
-#include "engine/gui/guirenderer.h"
+#include "engine/gfx/font.h"
+#include "engine/gfx/gfx.h"
+#include "engine/gfx/guirenderer.h"
 
-#include "utility/color.h"
+#include "engine/utility/color.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

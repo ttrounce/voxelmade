@@ -2,7 +2,7 @@
 #define VHM_CAMERA_H
 
 #include "transform.h"
-#include "../utility/types.h"
+#include "utility/types.h"
 
 namespace vhm
 {
