@@ -7,6 +7,7 @@ Code style is essentially light C-style C++. Please don't hate me!
 
 ## Dependencies
 
+- [kcat/openal-soft](https://github.com/kcat/openal-soft) ([License](https://github.com/kcat/openal-soft/blob/master/COPYING), [BSD3-Clause](https://github.com/kcat/openal-soft/blob/master/BSD-3Clause))
 - [recp/cglm](https://github.com/recp/cglm) ([License](https://github.com/recp/cglm/blob/master/LICENSE))
 - [nothing/stb](https://github.com/nothings/stb) ([MIT License](https://github.com/nothings/stb/blob/master/LICENSE))
 - [freetype/freetype](https://github.com/freetype/freetype) ([FTL License](https://github.com/freetype/freetype/blob/master/docs/FTL.TXT))
