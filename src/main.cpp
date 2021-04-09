@@ -9,11 +9,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "engine/audio/audio.h"
-#include "engine/audio/audioformat.h"
-#include <AL/al.h>
-#include <AL/alc.h>
-
 #include <stdio.h>
 #include <string.h>
 #include <glad/glad.h>
@@ -25,32 +20,8 @@ constexpr char* FONT_HACK = (char*) "hack";
 
 PERSPECTIVE_CAMERA* camera;
 
-ALCdevice* device = NULL;
-ALCcontext* context = NULL;
-
 void Init()
 {
-    WAV_DATA wav;
-    if(LoadWAV("dglih.wav", wav) == VHM_ERROR)
-    {
-        printf("Error loading WAV\n");
-    }
-
-    AUDIO_MANAGER::GetInstance()->LoadSampleWAV("bao", wav);
-    AUDIO_MANAGER::GetInstance()->PlaySampleOnce("bao", 1.0f, 1.0f);
-
-    FreeWAV(wav);
-
-    // ALCcontext* contextAL;
-    // alcCreateContext(contextAL, )
-    // u32 source;
-    // u32 buffer;
-    // alGenSources(1, &source);
-    // alGenBuffers(1, &buffer);
-    // alBufferData(buffer, wav.format, wav.data, wav.dataSize, wav.sampleRate);
-
-    // printf("%d\n", alGetError());
-
     InitFreeType();
 
     glEnable(GL_DEPTH_TEST);
