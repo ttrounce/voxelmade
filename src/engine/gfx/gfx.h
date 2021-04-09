@@ -3,6 +3,7 @@
 
 #include "../utility/types.h"
 #include <vector>
+#include <glad/glad.h>
 
 namespace vhm
 {
@@ -19,29 +20,29 @@ struct VAO
     std::vector<u32> vbos;
 };
 
-void SetBufferVAO(VAO& vao, u32 index, u32 size, void* data, u32 type, u32 length);
+void SetBufferVAO(vhm::VAO& vao, GLuint index, GLint size, void* data, GLenum type, GLint length);
 
 // Shader Program
 
-void CreateVertexShader(u32 program, const char* source, i32 sourceLength);
-void CreateFragmentShader(u32 program, const char* source, i32 sourceLength);
-void LinkProgram(u32 program);
+void CreateVertexShader(GLuint program, const GLchar* source, GLint sourceLength);
+void CreateFragmentShader(GLuint program, const GLchar* source, GLint sourceLength);
+void LinkProgram(GLuint program);
 
-void UniformVec2(u32 program, const char* name, vec2 vec);
-void UniformVec3(u32 program, const char* name, vec3 vec);
-void UniformVec4(u32 program, const char* name, vec4 vec);
-void UniformMat2(u32 program, const char* name, mat2 value);
-void UniformMat3(u32 program, const char* name, mat3 value);
-void UniformMat4(u32 program, const char* name, mat4 value);
+void UniformVec2(GLuint program, const GLchar* name, vec2 vec);
+void UniformVec3(GLuint program, const GLchar* name, vec3 vec);
+void UniformVec4(GLuint program, const GLchar* name, vec4 vec);
+void UniformMat2(GLuint program, const GLchar* name, mat2 value);
+void UniformMat3(GLuint program, const GLchar* name, mat3 value);
+void UniformMat4(GLuint program, const GLchar* name, mat4 value);
 
 // Texture
 
-void SetMinMag(u32 target, u32 min, u32 mag);
-void LoadTexture(u32 handle, u8* data, u32 width, u32 height, u32 internalFormat, u32 format);
-void LoadTextureArray(u32 handle, u8* data, u32 width, u32 height, u32 depth, u32 internalFormat, u32 format);
-void SetTextureArrayStorage(u32 handle, u32 internalFormat, u32 width, u32 height, u32 depth);
-void LoadTextureArrayLayer(u32 handle, u8* data, u32 x, u32 y, u32 width, u32 height, u32 layer, u32 format);
-u32 CreateQuickTexture(u32 target, u32* textureHandle, const char* path, u32 min, u32 mag);
+void SetMinMag(GLenum target, GLint min, GLint mag);
+void LoadTexture(GLuint handle, void* data, GLsizei width, GLsizei height, GLint internalFormat, GLenum format);
+void LoadTextureArray(GLuint handle, void* data, GLsizei width, GLsizei height, GLsizei depth, GLint internalFormat, GLenum format);
+void SetTextureArrayStorage(GLuint handle, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth);
+void LoadTextureArrayLayer(GLuint handle, void* data, GLint x, GLint y, GLsizei width, GLsizei height, GLint layer, GLenum format);
+u32 CreateQuickTexture(GLuint target, GLuint* textureHandle, const char* path, GLint min, GLint mag);
 
 }
 

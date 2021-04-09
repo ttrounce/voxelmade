@@ -5,6 +5,7 @@
 #include "gfx.h"
 #include "../utility/types.h"
 #include "../utility/logging.h"
+#include <glad/glad.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -47,7 +48,7 @@ struct FONT
 
     // opengl
     bool assignedGL;
-    u32 textureHandleGL;
+    GLuint textureHandleGL;
     
     // size specs
     i32 maxWidth;
@@ -65,9 +66,9 @@ class FONT_RENDERER
     private:
         std::map<char*, FONT*, _KEY_COMPARATOR> fonts;
 
-        VAO     vao;
-        u32     program;
-        char* fontpath;
+        VAO    vao;
+        GLuint program;
+        char*  fontpath;
 
         u32 LoadFTFace(char* key, const char* filepath, u32 fontSize);
         u32 FreeFTFace(char* key);

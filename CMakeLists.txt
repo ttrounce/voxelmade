@@ -8,19 +8,19 @@ if(BUILD_TYPE EQUAL 0)
     # Debug
     message("[BUILD TYPE] Debug")
     set(CMAKE_BUILD_TYPE "Debug")
-    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -g")
+    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Wall -g")
     set(BUILD_TESTS "ON")
 elseif(BUILD_TYPE EQUAL 1)
     # Release
     message("[BUILD TYPE] Release (With Tests)")
     set(CMAKE_BUILD_TYPE "Release")
-    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -O3")
+    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Wno-error=conversion -Werror -Wall -O3")
     set(BUILD_TESTS "ON")
 elseif(BUILD_TYPE EQUAL 2)
     # Release (No Tests)
     message("[BUILD TYPE] Release (No Tests)")
     set(CMAKE_BUILD_TYPE "Release")
-    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Werror -Wall -O3")
+    set(CMAKE_CXX_FLAGS "-std=gnu++14 -Wno-error=conversion -Werror -Wall -O3")
 endif()
 
 # Sources and Includes
@@ -34,6 +34,10 @@ list(REMOVE_ITEM SOURCES src/main.cpp)
 
 # External Dependencies
 
+# include_directories(dependencies/openal-soft/include)
+# link_directories(dependencies/openal-soft)
+
+add_subdirectory(dependencies/openal-soft)
 add_subdirectory(dependencies/stb)
 add_subdirectory(dependencies/freetype)
 add_subdirectory(dependencies/glfw)
@@ -43,6 +47,7 @@ add_subdirectory(dependencies/cglm)
 # Making Libraries and Executable
 
 add_library(${PROJECT_LIB} ${SOURCES})
+target_link_libraries(${PROJECT_LIB} OpenAL)
 target_link_libraries(${PROJECT_LIB} stb)
 target_link_libraries(${PROJECT_LIB} freetype)
 target_link_libraries(${PROJECT_LIB} glfw)
@@ -58,7 +63,14 @@ add_custom_command(
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> "../build"
     COMMAND ${CMAKE_COMMAND} -E rm $<TARGET_FILE:${PROJECT_NAME}>
-    COMMENT "Copying EXECUTABLE to build folder"
+    COMMENT "Copying ${PROJECT_NAME} to build folder"
+)
+
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/dependencies/openal-soft/OpenAL32.dll "../build"
+    COMMENT "Copying OpenAL32.dll to build folder"
 )
 
 # Tests
@@ -86,7 +98,7 @@ if(BUILD_TESTS)
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_TESTS}> "../build"
         COMMAND ${CMAKE_COMMAND} -E rm $<TARGET_FILE:${PROJECT_TESTS}>
-        COMMENT "Copying TESTS to build folder"
+        COMMENT "Copying ${PROJECT_TESTS} to build folder"
     )
 
 endif()

@@ -14,7 +14,7 @@ class GUI_RENDERER
     private:
         static GUI_RENDERER* instance;
         VAO vao;
-        u32 program;
+        GLuint program;
 
         GUI_RENDERER();
         ~GUI_RENDERER();
@@ -25,7 +25,7 @@ class GUI_RENDERER
             return &instance;
         }
         void FillRect(i32 screenX, i32 screenY, i32 width, i32 height, COLOR color);
-        void TextureRect(i32 screenX, i32 screenY, i32 width, i32 height, u32 textureHandleGL);
+        void TextureRect(i32 screenX, i32 screenY, i32 width, i32 height, GLuint textureHandleGL);
 };
 
 }
