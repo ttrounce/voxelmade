@@ -43,6 +43,7 @@ void Clean()
     FreeFreeType();
 }
 
+
 void Update(f64 time, f64 dt)
 {
     PollCameraInputs(*camera);

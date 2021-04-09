@@ -10,3 +10,6 @@
 [submodule "dependencies/freetype"]
 	path = dependencies/freetype
 	url = https://github.com/freetype/freetype
+[submodule "dependencies/openal-soft"]
+	path = dependencies/openal-soft
+	url = https://github.com/kcat/openal-soft
