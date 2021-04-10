@@ -24,8 +24,8 @@ class GUI_RENDERER
             static GUI_RENDERER instance;
             return &instance;
         }
-        void FillRect(i32 screenX, i32 screenY, i32 width, i32 height, COLOR color);
-        void TextureRect(i32 screenX, i32 screenY, i32 width, i32 height, GLuint textureHandleGL);
+        void FillRect(int screenX, int screenY, int width, int height, COLOR color);
+        void TextureRect(int screenX, int screenY, int width, int height, GLuint textureHandleGL);
 };
 
 }

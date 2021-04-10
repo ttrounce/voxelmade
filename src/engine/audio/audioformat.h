@@ -4,7 +4,7 @@
 #include "../utility/types.h"
 #include "../utility/logging.h"
 #include <stdio.h>
-#include <string.h>
+#include <string>
 
 #include <AL/al.h>
 
@@ -13,20 +13,20 @@ namespace vhm
 
 struct WAV_DATA
 {
-    i32 channels;
-    i32 sampleRate;
-    i32 bitsPerSample;
-    i32 format;
-    i32 dataSize;
-    u8* data;
+    int channels;
+    int sampleRate;
+    int bitsPerSample;
+    int format;
+    int dataSize;
+    uchar* data;
 };
 
-size_t ReadStringBuffer(FILE* file, u32 size, char* buffer);
-size_t ReadI32Buffer(FILE* file, u32 size, i32* buffer);
+size_t ReadStringBuffer(FILE* file, uint size, char* buffer);
+size_t ReadintBuffer(FILE* file, uint size, int* buffer);
 
 void FreeWAV(WAV_DATA& waveData);
 
-u32 LoadWAV(const char* path, WAV_DATA& waveData);
+uint LoadWAV(std::string path, WAV_DATA& waveData);
 
 }
 

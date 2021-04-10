@@ -4,12 +4,12 @@
 [submodule "dependencies/googletest"]
 	path = dependencies/googletest
 	url = https://github.com/google/googletest
-[submodule "dependencies/cglm"]
-	path = dependencies/cglm
-	url = https://github.com/recp/cglm
 [submodule "dependencies/freetype"]
 	path = dependencies/freetype
 	url = https://github.com/freetype/freetype
 [submodule "dependencies/openal-soft"]
 	path = dependencies/openal-soft
 	url = https://github.com/kcat/openal-soft
+[submodule "dependencies/glm"]
+	path = dependencies/glm
+	url = https://github.com/g-truc/glm

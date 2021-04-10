@@ -1,7 +1,7 @@
 #include "engine.h"
 #include "utility/types.h"
 
-#include <cglm/cglm.h>
+#include <glm/ext/scalar_common.hpp>
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -12,18 +12,17 @@
 
 using namespace vhm;
 
-WINDOW* window;
+std::unique_ptr<WINDOW> window;
 
-void MousePosCallback(GLFWwindow* hdl, f64 xpos, f64 ypos)
+void MousePosCallback(GLFWwindow* hdl, double xpos, double ypos)
 {
     if(window->handle == hdl)
     {
-        vec2 position = {(f32) xpos, (f32) ypos};
-        glm_vec2_copy(position, window->mouse->thisPos);
+        window->mouse->thisPos = glm::vec2((float) xpos, (float) ypos);
     }
 }
 
-void MouseButtonCallback(GLFWwindow* hdl, i32 key, i32 action, i32 mods)
+void MouseButtonCallback(GLFWwindow* hdl, int key, int action, int mods)
 {
     if(window->handle == hdl)
     {
@@ -38,7 +37,7 @@ void MouseButtonCallback(GLFWwindow* hdl, i32 key, i32 action, i32 mods)
     }
 }
 
-void KeyCallback(GLFWwindow* hdl, i32 key, i32 scancode, i32 action, i32 mods)
+void KeyCallback(GLFWwindow* hdl, int key, int scancode, int action, int mods)
 {
     if(window->handle == hdl)
     {
@@ -53,7 +52,7 @@ void KeyCallback(GLFWwindow* hdl, i32 key, i32 scancode, i32 action, i32 mods)
     }
 }
 
-void ResizeCallback(GLFWwindow* hdl, i32 width, i32 height)
+void ResizeCallback(GLFWwindow* hdl, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
@@ -62,7 +61,7 @@ int vhm::InitEngine()
 {
     if(glfwInit())
     {
-        window = new WINDOW;
+        window = std::make_unique<WINDOW>();
         if(window)
         {
             // Creating GLFW window
@@ -73,8 +72,8 @@ int vhm::InitEngine()
                 glfwMakeContextCurrent(window->handle);
                 if(gladLoadGL())
                 {  
-                    window->keyboard = new KEYBOARD;
-                    window->mouse = new MOUSE;
+                    window->keyboard = std::make_unique<KEYBOARD>();
+                    window->mouse = std::make_unique<MOUSE>();
                     
                     for(int i = 0; i < 7; i++)
                     {
@@ -130,17 +129,16 @@ void vhm::StartEngine(void (*update)(double, double), void (*draw)())
             time += dt;
 
             // mouse delta calculations
-            glm_vec2_sub(window->mouse->thisPos, window->mouse->lastPos, window->mouse->delta);
-            glm_vec2_clamp(window->mouse->delta, -128, 128);
+            window->mouse->delta = glm::clamp(window->mouse->thisPos - window->mouse->lastPos, glm::vec2(-128.0f), glm::vec2(128.0f));
 
             update(time, dt);
 
-            glm_vec2_copy(window->mouse->thisPos, window->mouse->lastPos);
+            window->mouse->lastPos = window->mouse->thisPos;
         }
         
         if(frameCountAccumulator >= 1.0)
         {
-            window->fps = glm_clamp(frameCount, 0, HARD_FPS_CAP);
+            window->fps = glm::clamp(frameCount, 0, HARD_FPS_CAP);
             frameCount = 0;
             frameCountAccumulator -= 1;
         }
@@ -154,29 +152,27 @@ void vhm::StartEngine(void (*update)(double, double), void (*draw)())
 
 void vhm::CleanEngine()
 {
-    delete window->keyboard;
-    delete window->mouse;
-    delete window;
+    window.reset();
     glfwTerminate();
 }
 
-i32 vhm::GetWindowWidth()
+int vhm::GetWindowWidth()
 {
-    i32 width, height;
+    int width, height;
     glfwGetWindowSize(window->handle, &width, &height);
     return width;
 }
 
-i32 vhm::GetWindowHeight()
+int vhm::GetWindowHeight()
 {
-    i32 width, height;
+    int width, height;
     glfwGetWindowSize(window->handle, &width, &height);
     return height;
 }
 
-f32 vhm::GetAspectRatio()
+float vhm::GetAspectRatio()
 {
-    i32 width, height;
+    int width, height;
     glfwGetWindowSize(window->handle, &width, &height);
     return (float) width / (float) height;
 }

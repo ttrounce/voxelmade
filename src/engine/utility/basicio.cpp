@@ -2,39 +2,40 @@
 
 #include "logging.h"
 #include "types.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 
-char* vhm::ReadString(const char* path)
+std::string vhm::ReadString(std::string path)
 {
-    FILE* file = fopen(path, "rb");
+    FILE* file = fopen(path.c_str(), "rb");
     if(file)
     {
         fseek(file, 0, SEEK_END);
-        i32 size = ftell(file);
+        int size = ftell(file);
         fseek(file, 0, SEEK_SET);
 
-        char* source = (char*) malloc(size + 1);
+        char* source = new char[size + 1];
         if(source)
         {
             fread(source, 1, size, file);
             source[size] = '\0';
         }
         fclose(file);
-        return source;
+        std::string outputSource(source);
+        delete[] source;
+        return outputSource;
     }
-    else printf("%s File not found %s\n", VHM_ENGINE_ERR, path);
+    else printf("%s File not found %s\n", VHM_ENGINE_ERR, path.c_str());
     return NULL;
 }
 
-void vhm::WriteString(const char* path, const char* value, int length)
+void vhm::WriteString(std::string path, std::string value, int length)
 {
-    FILE* file = fopen(path, "wb");
+    FILE* file = fopen(path.c_str(), "wb");
     if(file)
     {
-        fwrite(value, sizeof(char), length, file);
+        fwrite(value.c_str(), sizeof(char), length, file);
         fclose(file);
     }
-    else printf("%s File not found %s\n", VHM_ENGINE_ERR, path);
+    else printf("%s File not found %s\n", VHM_ENGINE_ERR, path.c_str());
 }

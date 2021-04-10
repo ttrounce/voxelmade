@@ -1,54 +1,55 @@
 #ifndef VHM_AUDIO_H
 #define VHM_AUDIO_H
 
-#include "../utility/types.h"
-#include "../utility/logging.h"
 #include "audioformat.h"
 #include <map>
+#include <memory>
 #include <vector>
 #include <string>
 #include <al/alc.h>
 #include <al/al.h>
-#include <iostream>
-#include <thread>
+// #include <iostream>
+
+using alcdevice_ptr = std::unique_ptr<ALCdevice, decltype(&alcCloseDevice)>;
+using alccontext_ptr = std::unique_ptr<ALCcontext, decltype(&alcDestroyContext)>;
 
 namespace vhm
 {
 
-u32 FreeAudioDevice(ALCdevice* device);
-void FreeAudioContext(ALCcontext* context);
 void GetAvailableAudioDevices(std::vector<std::string>& devices);
-u32 GetDefaultAudioDevice(ALCdevice*& device);
-u32 GetAudioContext(ALCcontext*& context, ALCdevice* device);
+alcdevice_ptr GetDefaultAudioDevice();
+alccontext_ptr GetAudioContext(ALCdevice* device);
 
 struct AUDIO_SAMPLE
 {
     ALuint buffer;
+    AUDIO_SAMPLE(){}
+    ~AUDIO_SAMPLE()
+    {
+        alDeleteBuffers(1, &buffer);
+    }
 };
 
 class AUDIO_MANAGER
 {
 private:
-    ALCcontext* context;
-    ALCdevice* mainDevice;
-    std::map<std::string, AUDIO_SAMPLE*> samples;
+    alccontext_ptr context;
+    alcdevice_ptr mainDevice;
+    std::map<std::string, std::shared_ptr<AUDIO_SAMPLE>> samples;
 
+public:
     AUDIO_MANAGER();
     ~AUDIO_MANAGER();
-public:
-    static AUDIO_MANAGER* GetInstance()
-    {
-        static AUDIO_MANAGER manager;
-        return &manager;
-    }
 
     void LoadSampleWAV(std::string name, WAV_DATA& wav);
 
     // TODO: create some greater controls over the sounds, how they're played i.e. looping, volume, etc
 
-    u32 PlaySampleOnce(std::string name, ALfloat volume, ALfloat pitch);
-    u32 PlaySampleLooped(std::string name, ALfloat volume, ALfloat pitch, bool (*shouldLoop)(ALuint source));
+    uint PlaySampleOnce(std::string name, ALfloat volume, ALfloat pitch);
+    uint PlaySampleLooped(std::string name, ALfloat volume, ALfloat pitch, bool (*shouldLoop)(ALuint source));
 };
+
+extern std::unique_ptr<AUDIO_MANAGER> audioManager;
 
 }
 

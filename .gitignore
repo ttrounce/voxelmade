@@ -6,6 +6,9 @@ cmake/
 *.so
 *.a
 
+# Misc
+planning/
+
 # Output
 build/
 !dependencies/glad/*

@@ -34,10 +34,11 @@ void vhm::SetBufferVAO(vhm::VAO& vao, GLuint index, GLint size, void* data, GLen
 
 // Shader Program
 
-void vhm::CreateVertexShader(GLuint program, const GLchar* source, GLint sourceLength)
+void vhm::CreateVertexShader(GLuint program, std::string source, GLint sourceLength)
 {
+    const char* trueSource = source.c_str();
     GLuint handle = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(handle, 1, &source, &sourceLength);
+    glShaderSource(handle, 1, &trueSource, &sourceLength);
     glCompileShader(handle);
 
     GLint success = 0;
@@ -60,10 +61,11 @@ void vhm::CreateVertexShader(GLuint program, const GLchar* source, GLint sourceL
     glDeleteShader(handle);
 }
 
-void vhm::CreateFragmentShader(GLuint program, const GLchar* source, GLint sourceLength)
+void vhm::CreateFragmentShader(GLuint program, std::string source, GLint sourceLength)
 {
+    const char* trueSource = source.c_str();
     GLuint handle = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(handle, 1, &source, &sourceLength);
+    glShaderSource(handle, 1, &trueSource, &sourceLength);
     glCompileShader(handle);
 
     GLint success = 0;
@@ -108,34 +110,34 @@ void vhm::LinkProgram(GLuint program)
     }
 }
 
-void vhm::UniformVec2(GLuint program, const GLchar* name, vec2 vec)
+void vhm::UniformVec2(GLuint program, std::string name, glm::vec2 vec)
 {
-    glUniform2f(glGetUniformLocation(program, name), vec[0], vec[1]);
+    glUniform2f(glGetUniformLocation(program, name.c_str()), vec[0], vec[1]);
 }
 
-void vhm::UniformVec3(GLuint program, const GLchar* name, vec3 vec)
+void vhm::UniformVec3(GLuint program, std::string name, glm::vec3 vec)
 {
-    glUniform3f(glGetUniformLocation(program, name), vec[0], vec[1], vec[2]);
+    glUniform3f(glGetUniformLocation(program, name.c_str()), vec[0], vec[1], vec[2]);
 }
 
-void vhm::UniformVec4(GLuint program, const GLchar* name, vec4 vec)
+void vhm::UniformVec4(GLuint program, std::string name, glm::vec4 vec)
 {
-    glUniform4f(glGetUniformLocation(program, name), vec[0], vec[1], vec[2], vec[3]);
+    glUniform4f(glGetUniformLocation(program, name.c_str()), vec[0], vec[1], vec[2], vec[3]);
 }
 
-void vhm::UniformMat2(GLuint program, const GLchar* name, mat2 value)
+void vhm::UniformMat2(GLuint program, std::string name, glm::mat2 value)
 {
-    glUniformMatrix2fv(glGetUniformLocation(program, name), 1, false, &value[0][0]);
+    glUniformMatrix2fv(glGetUniformLocation(program, name.c_str()), 1, false, &value[0][0]);
 }
 
-void vhm::UniformMat3(GLuint program, const GLchar* name, mat3 value)
+void vhm::UniformMat3(GLuint program, std::string name, glm::mat3 value)
 {
-    glUniformMatrix3fv(glGetUniformLocation(program, name), 1, false, &value[0][0]);
+    glUniformMatrix3fv(glGetUniformLocation(program, name.c_str()), 1, false, &value[0][0]);
 }
 
-void vhm::UniformMat4(GLuint program, const GLchar* name, mat4 value)
+void vhm::UniformMat4(GLuint program, std::string name, glm::mat4 value)
 {
-    glUniformMatrix4fv(glGetUniformLocation(program, name), 1, false, &value[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(program, name.c_str()), 1, false, &value[0][0]);
 }
 
 // Texture
@@ -169,10 +171,10 @@ void vhm::LoadTextureArrayLayer(GLuint handle, void* data, GLint x, GLint y, GLs
     glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, x, y, layer, width, height, 1, format, GL_UNSIGNED_BYTE, data);
 }
 
-u32 vhm::CreateQuickTexture(GLuint target, GLuint* textureHandle, const char* path, GLint min, GLint mag)
+uint vhm::CreateQuickTexture(GLuint target, GLuint* textureHandle, std::string path, GLint min, GLint mag)
 {
     GLint w, h, c;
-    u8* data = stbi_load(path, &w, &h, &c, STBI_rgb_alpha);
+    uchar* data = stbi_load(path.c_str(), &w, &h, &c, STBI_rgb_alpha);
 
     if(!data)
     {

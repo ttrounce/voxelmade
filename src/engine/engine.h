@@ -3,6 +3,8 @@
 
 #include "utility/types.h"
 #include "utility/logging.h"
+#include <glm/ext/vector_float2.hpp>
+#include <memory>
 
 #define VHM_SUCCESS 0
 #define VHM_GENERAL_ERROR 1
@@ -19,15 +21,15 @@ namespace vhm
 struct MOUSE
 {
     bool buttons[7];
-    vec2 lastPos;
-    vec2 thisPos;
-    vec2 delta;
+    glm::vec2 lastPos;
+    glm::vec2 thisPos;
+    glm::vec2 delta;
 };
 
 struct KEYBOARD
 {
     bool keys[348];
-    u32 lastPressed;
+    uint lastPressed;
 };
 
 /**
@@ -38,16 +40,16 @@ struct WINDOW
     /// The GLFW handle linked to the display UI
     GLFWwindow* handle;
     /// The Keyboard
-    KEYBOARD* keyboard;
+    std::unique_ptr<KEYBOARD> keyboard;
     // The Mouse
-    MOUSE* mouse;
+    std::unique_ptr<MOUSE> mouse;
     /// The current FPS
     unsigned int fps;
 };
 
 }
 
-extern vhm::WINDOW* window;
+extern std::unique_ptr<vhm::WINDOW> window;
 
 namespace vhm
 {
@@ -72,17 +74,17 @@ void CleanEngine();
 /**
  * @return window width
  */
-i32 GetWindowWidth();
+int GetWindowWidth();
 
 /**
  * @return window height
  */
-i32 GetWindowHeight();
+int GetWindowHeight();
 
 /**
  * @return window aspect ratio
  */
-f32 GetAspectRatio();
+float GetAspectRatio();
     
 }
 

@@ -4,6 +4,10 @@
 #include "../engine.h"
 #include "guirenderer.h"
 
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
 #include <string.h>
 #include <stdlib.h>
 #include <glad/glad.h>
@@ -12,8 +16,8 @@ using namespace vhm;
 
 GUI_RENDERER::GUI_RENDERER()
 {
-    f32 vertices[12] = {0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0};
-    f32 texels[12] = {0.0, 0.0, 0.99, 0.99, 0.99, 0.0, 0.0, 0.0, 0.0, 0.99, 0.99, 0.99};
+    float vertices[12] = {0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0};
+    float texels[12] = {0.0, 0.0, 0.99, 0.99, 0.99, 0.0, 0.0, 0.0, 0.0, 0.99, 0.99, 0.99};
 
     glGenVertexArrays(1, &vao.handle);
     glBindVertexArray(vao.handle);
@@ -21,18 +25,15 @@ GUI_RENDERER::GUI_RENDERER()
     SetBufferVAO(vao, 1, 2, texels, GL_FLOAT, 12);
     glBindVertexArray(0);
 
-    char* vert = ReadString("shaders/gui_vert.glsl");
-    char* frag = ReadString("shaders/gui_frag.glsl");
+    std::string vert = ReadString("shaders/gui_vert.glsl");
+    std::string frag = ReadString("shaders/gui_frag.glsl");
 
     program = glCreateProgram();
     glUseProgram(program);
-    CreateVertexShader(program, vert, strlen(vert));
-    CreateFragmentShader(program, frag, strlen(frag));
+    CreateVertexShader(program, vert, vert.length());
+    CreateFragmentShader(program, frag, frag.length());
     LinkProgram(program);
     glUseProgram(0);
-
-    free(vert);
-    free(frag);
 }
 
 GUI_RENDERER::~GUI_RENDERER()
@@ -42,7 +43,7 @@ GUI_RENDERER::~GUI_RENDERER()
     glDeleteVertexArrays(1, &vao.handle);
 }
 
-void GUI_RENDERER::FillRect(i32 sx, i32 sy, i32 width, i32 height, COLOR color)
+void GUI_RENDERER::FillRect(int sx, int sy, int width, int height, COLOR color)
 {
     glUseProgram(program);
     glBindVertexArray(vao.handle);
@@ -52,17 +53,12 @@ void GUI_RENDERER::FillRect(i32 sx, i32 sy, i32 width, i32 height, COLOR color)
     glUniform1f(glGetUniformLocation(program, "defaultLayerZ"), GFX_LAYER_GUI);
 
     // projection
-    mat4 projection;
-    glm_mat4_identity(projection);
-    glm_ortho(0.0, (f32) GetWindowWidth(), (f32) GetWindowHeight(), 0.0, 0.0001, 10.0, projection);
+    glm::mat4 projection = glm::ortho<float>(0.0, (float) GetWindowWidth(), (float) GetWindowHeight(), 0.0, 0.0001, 10.0);
     UniformMat4(program, "projection", projection);
 
-    mat4 transformation;
-    vec3 translation = {(f32) sx, (f32) sy, 0.0};
-    vec3 scale = {(f32) width, (f32) height, 1.0};
-    glm_mat4_identity(transformation);
-    glm_translate(transformation, translation);
-    glm_scale(transformation, scale);
+    glm::mat4 transformation(1.0f);
+    transformation = glm::translate(transformation, glm::vec3(sx, sy, 0.0));
+    transformation = glm::scale(transformation, glm::vec3(width, height, 1.0));
     UniformMat4(program, "transformation", transformation);
 
     UniformVec3(program, "color", color.vec);
@@ -73,7 +69,7 @@ void GUI_RENDERER::FillRect(i32 sx, i32 sy, i32 width, i32 height, COLOR color)
     glUseProgram(0);
 }
 
-void GUI_RENDERER::TextureRect(i32 sx, i32 sy, i32 width, i32 height, u32 textureHandleGL)
+void GUI_RENDERER::TextureRect(int sx, int sy, int width, int height, uint textureHandleGL)
 {
     glUseProgram(program);
     glBindVertexArray(vao.handle);
@@ -84,17 +80,12 @@ void GUI_RENDERER::TextureRect(i32 sx, i32 sy, i32 width, i32 height, u32 textur
     glUniform1f(glGetUniformLocation(program, "defaultLayerZ"), GFX_LAYER_GUI);
 
     // projection
-    mat4 projection;
-    glm_mat4_identity(projection);
-    glm_ortho(0.0, (f32) GetWindowWidth(), (f32) GetWindowHeight(), 0.0, 0.0001, 10.0, projection);
+    glm::mat4 projection = glm::ortho<float>(0.0, (float) GetWindowWidth(), (float) GetWindowHeight(), 0.0, 0.0001, 10.0);
     UniformMat4(program, "projection", projection);
 
-    mat4 transformation;
-    vec3 translation = {(f32) sx, (f32) sy, 0.0};
-    vec3 scale = {(f32) width, (f32) height, 1.0};
-    glm_mat4_identity(transformation);
-    glm_translate(transformation, translation);
-    glm_scale(transformation, scale);
+    glm::mat4 transformation(1.0f);
+    transformation = glm::translate(transformation, glm::vec3(sx, sy, 0.0));
+    transformation = glm::scale(transformation, glm::vec3(width, height, 1.0));
     UniformMat4(program, "transformation", transformation);
 
     glDrawArrays(GL_TRIANGLES, 0, 12);

@@ -28,7 +28,7 @@ const char* file_filled_path = "filled_file_test.txt";
 
 TEST(VHM_IO_TEST, READ_EMPTY_FILE) {
     build_empty_file(file_empty_path);
-    ASSERT_STREQ(vhm::ReadString(file_empty_path), "");
+    ASSERT_STREQ(vhm::ReadString(file_empty_path).c_str(), "");
     remove(file_empty_path);
 }
 
@@ -36,7 +36,7 @@ TEST(VHM_IO_TEST, WRITE_AND_READ_FILLED_FILE) {
     const char* text = "this is test text";
     int length = strlen(text);
     vhm::WriteString(file_filled_path, text, length);
-    ASSERT_STREQ(vhm::ReadString(file_filled_path), text);
+    ASSERT_STREQ(vhm::ReadString(file_filled_path).c_str(), text);
     remove(file_filled_path);
 }
 /* ------------- VHM_GLM ------------- */

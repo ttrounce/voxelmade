@@ -3,18 +3,19 @@
 
 #include "transform.h"
 #include "utility/types.h"
+#include <string>
 
 namespace vhm
 {
 
 struct PERSPECTIVE_CAMERA
 {
-    mat4 persMatrix;
+    glm::mat4 persMatrix;
     float aspect, fov, near, far;
     TRANSFORM transform;
 
     PERSPECTIVE_CAMERA() {}
-    PERSPECTIVE_CAMERA(f32 aspect, f32 fov, f32 near, f32 far)
+    PERSPECTIVE_CAMERA(float aspect, float fov, float near, float far)
     {
         this->aspect = aspect;
         this->fov = fov;
@@ -24,7 +25,7 @@ struct PERSPECTIVE_CAMERA
 };
 
 void UpdatePerspectiveCamera(PERSPECTIVE_CAMERA& camera);
-void UniformPerspectiveCamera(u32 program, const char* view, const char* proj, PERSPECTIVE_CAMERA camera);
+void UniformPerspectiveCamera(uint program, std::string view, std::string proj, PERSPECTIVE_CAMERA camera);
 void PollCameraInputs(PERSPECTIVE_CAMERA& camera);
 
 }

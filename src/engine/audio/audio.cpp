@@ -1,20 +1,10 @@
+#include "../utility/logging.h"
 #include "audio.h"
+#include <thread>
 
 using namespace vhm;
 
-u32 vhm::FreeAudioDevice(ALCdevice* device)
-{
-    if(alcCloseDevice(device))
-    {
-        return VHM_SUCCESS;
-    }
-    return VHM_ERROR;   
-}
-
-void vhm::FreeAudioContext(ALCcontext* context)
-{
-    alcDestroyContext(context);
-}
+std::unique_ptr<AUDIO_MANAGER> vhm::audioManager = std::make_unique<AUDIO_MANAGER>();
 
 void vhm::GetAvailableAudioDevices(std::vector<std::string>& devices)
 {
@@ -28,52 +18,41 @@ void vhm::GetAvailableAudioDevices(std::vector<std::string>& devices)
     } while(*(ptr + 1) != '\0');
 }
 
-u32 vhm::GetDefaultAudioDevice(ALCdevice*& device)
+alcdevice_ptr vhm::GetDefaultAudioDevice()
 {
-    device = alcOpenDevice(nullptr);
+    auto device = alcOpenDevice(nullptr);
     if(device && alcGetError(device) == ALC_NO_ERROR)
     {
-        return VHM_SUCCESS;
+        return alcdevice_ptr(device, alcCloseDevice);
     }
-    return VHM_ERROR;
+    return alcdevice_ptr(nullptr, nullptr);
 }
 
-u32 vhm::GetAudioContext(ALCcontext*& context, ALCdevice* device)
+alccontext_ptr vhm::GetAudioContext(ALCdevice* device)
 {
-    context = alcCreateContext(device, NULL);
+    auto context = alcCreateContext(device, NULL);
     if(context && alcGetError(device) == ALC_NO_ERROR)
     {
-        return VHM_SUCCESS;
+        return alccontext_ptr(context, alcDestroyContext);
     }
-    return VHM_ERROR;
+    return alccontext_ptr(nullptr, nullptr);
 }
 
-struct AUDIO_SAMPLE
+AUDIO_MANAGER::AUDIO_MANAGER() : context(nullptr, nullptr), mainDevice(nullptr, nullptr)
 {
-    ALuint buffer;
-};
-
-AUDIO_MANAGER::AUDIO_MANAGER()
-{
-    GetDefaultAudioDevice(mainDevice);
-    GetAudioContext(context, mainDevice);
-    alcMakeContextCurrent(context);
+    mainDevice = GetDefaultAudioDevice();
+    context = GetAudioContext(mainDevice.get());
+    alcMakeContextCurrent(context.get());
 }
 AUDIO_MANAGER::~AUDIO_MANAGER()
 {
-    for(auto it = samples.begin(); it != samples.end(); it++)
-    {
-        alDeleteBuffers(1, &it->second->buffer);
-        delete &it->second;
-    }
-
-    FreeAudioContext(context);
-    FreeAudioDevice(mainDevice);
+    samples.clear();
 }
+
 void AUDIO_MANAGER::LoadSampleWAV(std::string name, WAV_DATA& wav)
 {
 
-    AUDIO_SAMPLE* sample = new AUDIO_SAMPLE;
+    std::shared_ptr<AUDIO_SAMPLE> sample = std::make_shared<AUDIO_SAMPLE>();
     alGenBuffers(1, &sample->buffer);
     alBufferData(sample->buffer, wav.format, wav.data, wav.dataSize, wav.sampleRate);
     samples.insert(std::make_pair(name, sample));
@@ -81,14 +60,14 @@ void AUDIO_MANAGER::LoadSampleWAV(std::string name, WAV_DATA& wav)
 
 // TODO: create some greater controls over the sounds, how they're played i.e. looping, volume, etc
 
-u32 AUDIO_MANAGER::PlaySampleOnce(std::string name, ALfloat volume, ALfloat pitch)
+uint AUDIO_MANAGER::PlaySampleOnce(std::string name, ALfloat volume, ALfloat pitch)
 {
     if(samples.count(name) == 0)
     {
         printf("%s No sample found with name %s", VHM_ENGINE_ERR, name.c_str());
         return VHM_ERROR;
     }
-    AUDIO_SAMPLE* sample = samples.at(name);
+    std::shared_ptr<AUDIO_SAMPLE> sample = samples.at(name);
 
     // Going to stick with a new thread, might make some sort of Thread Pool later.
     std::thread([volume, pitch](ALuint buffer){
@@ -109,14 +88,14 @@ u32 AUDIO_MANAGER::PlaySampleOnce(std::string name, ALfloat volume, ALfloat pitc
     return VHM_SUCCESS;
 }
 
-u32 AUDIO_MANAGER::PlaySampleLooped(std::string name, ALfloat volume, ALfloat pitch, bool (*shouldLoop)(ALuint source))
+uint AUDIO_MANAGER::PlaySampleLooped(std::string name, ALfloat volume, ALfloat pitch, bool (*shouldLoop)(ALuint source))
 {
     if(samples.count(name) == 0)
     {
         printf("%s No sample found with name %s", VHM_ENGINE_ERR, name.c_str());
         return VHM_ERROR;
     }
-    AUDIO_SAMPLE* sample = samples.at(name);
+    std::shared_ptr<AUDIO_SAMPLE> sample = samples.at(name);
 
     // Going to stick with a new thread, might make some sort of Thread Pool later.
     std::thread([shouldLoop, volume, pitch](ALuint buffer){

@@ -1,13 +1,14 @@
 #include "audioformat.h"
+#include <string.h>
 
 using namespace vhm;
 
-size_t vhm::ReadStringBuffer(FILE* file, u32 size, char* buffer)
+size_t vhm::ReadStringBuffer(FILE* file, uint size, char* buffer)
 {
     return fread(buffer, 1, size, file);
 }
 
-size_t vhm::ReadI32Buffer(FILE* file, u32 size, i32* buffer)
+size_t vhm::ReadintBuffer(FILE* file, uint size, int* buffer)
 {
     *buffer = 0;
     return fread(buffer, 1, size, file);
@@ -18,20 +19,20 @@ void vhm::FreeWAV(WAV_DATA& waveData)
     delete[] waveData.data;
 }
 
-u32 vhm::LoadWAV(const char* path, WAV_DATA& waveData)
+uint vhm::LoadWAV(std::string path, WAV_DATA& waveData)
 {
-    FILE* file = fopen(path, "rb");
+    FILE* file = fopen(path.c_str(), "rb");
     if(file)
     {
         fseek(file, 0, SEEK_SET);
 
         char buffer[4];
-        i32 intbuf = 0;
+        int intbuf = 0;
 
-        i32 channels = 0;
-        i32 sampleRate = 0;
-        i32 bitsPerSample = 0;
-        i32 dataSize =0;
+        int channels = 0;
+        int sampleRate = 0;
+        int bitsPerSample = 0;
+        int dataSize =0;
 
         // RIFF Check
         if(!ReadStringBuffer(file, 4, buffer) || strncmp(buffer, "RIFF", 4) != 0)
@@ -62,21 +63,21 @@ u32 vhm::LoadWAV(const char* path, WAV_DATA& waveData)
         }
 
         // Length of format data
-        if(!ReadI32Buffer(file, 4, &intbuf) || intbuf != 16)
+        if(!ReadintBuffer(file, 4, &intbuf) || intbuf != 16)
         {  
             fclose(file);
             return VHM_ERROR;
         }
 
         // Type of format (Always 1)
-        if(!ReadI32Buffer(file, 2, &intbuf) || intbuf != 1)
+        if(!ReadintBuffer(file, 2, &intbuf) || intbuf != 1)
         {
             fclose(file);
             return VHM_ERROR;
         }
 
         // Number of channels
-        if(!ReadI32Buffer(file, 2, &intbuf) || intbuf <= 0)
+        if(!ReadintBuffer(file, 2, &intbuf) || intbuf <= 0)
         {
             fclose(file);
             return VHM_ERROR;
@@ -85,7 +86,7 @@ u32 vhm::LoadWAV(const char* path, WAV_DATA& waveData)
         intbuf = 0;
 
         // Sample Rate
-        if(!ReadI32Buffer(file, 4, &intbuf) || intbuf <= 0)
+        if(!ReadintBuffer(file, 4, &intbuf) || intbuf <= 0)
         {
             fclose(file);
             return VHM_ERROR;
@@ -94,23 +95,23 @@ u32 vhm::LoadWAV(const char* path, WAV_DATA& waveData)
         intbuf = 0;
 
         // Sample Rate * BitsPerSample * Channels / 8
-        if(!ReadI32Buffer(file, 4, &intbuf) || intbuf <= 0)
+        if(!ReadintBuffer(file, 4, &intbuf) || intbuf <= 0)
         {
             fclose(file);
             return VHM_ERROR;
         }
 
         // Bits Per Channel Sample
-        if(!ReadI32Buffer(file, 2, &intbuf) || intbuf <= 0)
+        if(!ReadintBuffer(file, 2, &intbuf) || intbuf <= 0)
         {
             fclose(file);
             return VHM_ERROR;
         }
-        i32 fmt = intbuf;
+        int fmt = intbuf;
         intbuf = 0;
 
         // Bits per Sample
-        if(!ReadI32Buffer(file, 2, &intbuf) || intbuf <= 0)
+        if(!ReadintBuffer(file, 2, &intbuf) || intbuf <= 0)
         {
             fclose(file);
             return VHM_ERROR;
@@ -126,7 +127,7 @@ u32 vhm::LoadWAV(const char* path, WAV_DATA& waveData)
         }
 
         // Size of data section
-        if(!ReadI32Buffer(file, 4, &intbuf) || intbuf <= 0)
+        if(!ReadintBuffer(file, 4, &intbuf) || intbuf <= 0)
         {
             fclose(file);
             return VHM_ERROR;
@@ -153,13 +154,13 @@ u32 vhm::LoadWAV(const char* path, WAV_DATA& waveData)
         waveData.bitsPerSample = bitsPerSample;
         waveData.sampleRate = sampleRate;
         waveData.dataSize = dataSize;
-        waveData.data = new u8[dataSize];
+        waveData.data = new uchar[dataSize];
 
         fread(waveData.data, 1, dataSize, file);
 
         fclose(file);
         return VHM_SUCCESS;
     }
-    else printf("%s File not found %s\n", VHM_ENGINE_ERR, path);
+    else printf("%s File not found %s\n", VHM_ENGINE_ERR, path.c_str());
     return VHM_ERROR;
 }

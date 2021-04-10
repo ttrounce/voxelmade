@@ -1,22 +1,24 @@
 #ifndef VHM_TRANSFORM_H
 #define VHM_TRANSFORM_H
 
-#include "utility/glm.h"
+#include <glm/ext/vector_float3.hpp>
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 namespace vhm
 {
 
 struct TRANSFORM
 {
-    mat4 mat;
-    vec3 pos;
-    vec3 rot;
+    glm::mat4 mat;
+    glm::vec3 pos;
+    glm::vec3 rot;
 
     TRANSFORM()
     {
-        glm_mat4_identity(mat);
-        vhm::glm_Vec3Set(0.0, 0.0, 0.0, pos);
-        vhm::glm_Vec3Set(0.0, 0.0, 0.0, rot);
+        mat = glm::mat4(1.0f);
+        pos = glm::vec3(0, 0, 0);
+        rot = glm::vec3(0, 0, 0);
     }
 };
 

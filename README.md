@@ -3,7 +3,6 @@
 [![License](https://img.shields.io/github/license/ttrounce/voxelmade)](https://github.com/ttrounce/voxelmade/blob/main/LICENSE.md)
 
 A little handmade-ish clone of a popular voxel game. Made completely for fun.
-Code style is essentially light C-style C++. Please don't hate me!
 
 ## Dependencies
 
