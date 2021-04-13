@@ -3,6 +3,7 @@
 
 #include "gfx.h"
 #include "../utility/types.h"
+#include <memory>
 
 namespace vhm
 {
@@ -12,21 +13,16 @@ struct COLOR;
 class GUI_RENDERER
 {
     private:
-        static GUI_RENDERER* instance;
         VAO vao;
         GLuint program;
-
+    public:
         GUI_RENDERER();
         ~GUI_RENDERER();
-    public:
-        static GUI_RENDERER* GetInstance()
-        {
-            static GUI_RENDERER instance;
-            return &instance;
-        }
         void FillRect(int screenX, int screenY, int width, int height, COLOR color);
         void TextureRect(int screenX, int screenY, int width, int height, GLuint textureHandleGL);
 };
+
+extern std::unique_ptr<GUI_RENDERER> guiRenderer;
 
 }
 

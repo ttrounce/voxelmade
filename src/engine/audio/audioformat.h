@@ -21,11 +21,7 @@ struct WAV_DATA
     uchar* data;
 };
 
-size_t ReadStringBuffer(FILE* file, uint size, char* buffer);
-size_t ReadintBuffer(FILE* file, uint size, int* buffer);
-
 void FreeWAV(WAV_DATA& waveData);
-
 uint LoadWAV(std::string path, WAV_DATA& waveData);
 
 }

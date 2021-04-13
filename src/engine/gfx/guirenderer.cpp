@@ -1,6 +1,6 @@
-#include "../utility/basicio.h"
 #include "../utility/glm.h"
 #include "../utility/color.h"
+#include "../utility/io.h"
 #include "../engine.h"
 #include "guirenderer.h"
 
@@ -13,6 +13,8 @@
 #include <glad/glad.h>
 
 using namespace vhm;
+
+std::unique_ptr<GUI_RENDERER> vhm::guiRenderer = std::make_unique<GUI_RENDERER>();
 
 GUI_RENDERER::GUI_RENDERER()
 {
